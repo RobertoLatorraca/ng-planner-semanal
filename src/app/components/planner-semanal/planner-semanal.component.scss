@@ -1,0 +1,72 @@
+h1 {
+    font-family: "Fredericka the Great";
+}
+
+h2 {
+    font-family: "Amatic SC";
+}
+
+h3 {
+    font-family: "Playfair Display";
+    @apply font-black mb-2;
+}
+
+.bg-image {
+    background-image: url(../../../assets/images/warm-wall-texture.jpg);
+    background-size: cover;
+}
+
+.ribbon {
+    @apply
+        relative
+        block
+        w-5/6
+        bg-black
+        text-center
+        text-white
+        font-normal;
+}
+
+.ribbon::before,
+.ribbon::after {
+    content: '';
+    @apply
+        absolute
+        top-2
+        -left-7
+        w-10
+        h-0;
+    border: 0.7rem solid black;
+    border-left-color: transparent;
+}
+
+.ribbon::after {
+    @apply
+        top-2
+        left-auto
+        -right-7
+        border;
+    border: 0.7rem solid black;
+    border-right-color: transparent;
+}
+
+.ribbon-2 {
+    @apply
+        relative
+        block
+        w-full
+        bg-black
+        text-center
+        text-white
+        font-normal;
+    clip-path: polygon(100% 0, calc(100% - 0.8rem) 50%, 100% 100%, 0% 100%, 0.8rem 50%, 0% 0%);
+}
+
+.item {
+    font-family: "Caveat";
+    @apply
+        border-b
+        border-dotted
+        border-black
+        text-xl;
+}

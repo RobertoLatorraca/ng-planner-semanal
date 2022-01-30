@@ -2,3 +2,27 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+@font-face {
+    font-family: "Fredericka the Great";
+    src: url(./assets/fonts/FrederickatheGreat-Regular.ttf);
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Amatic SC";
+    src: url(./assets/fonts/AmaticSC-Bold.ttf);
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Playfair Display";
+    src: url(./assets/fonts/PlayfairDisplay-VariableFont_wght.ttf);
+}
+
+@font-face {
+    font-family: "Caveat";
+    src: url(./assets/fonts/Caveat-VariableFont_wght.ttf);
+}
