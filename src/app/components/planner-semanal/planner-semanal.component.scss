@@ -70,3 +70,20 @@ h3 {
         border-black
         text-xl;
 }
+
+.trash-icon {
+    content: url(../../../assets/svg/delete_black_18dp.svg);
+}
+
+.unchecked-icon {
+    content: url(../../../assets/svg/circle_black_18dp.svg);
+}
+
+.checked-icon {
+    content: url(../../../assets/svg/task_alt_black_18dp.svg);
+}
+
+.add-task {
+    font-family: "Ubuntu";
+    @apply text-sm leading-6 text-gray-600;
+}
