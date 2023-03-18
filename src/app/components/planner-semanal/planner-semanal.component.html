@@ -14,23 +14,13 @@
                         <div class="w-full flex justify-center">
                             <h3 class="ribbon">NO OLVIDARME DE:</h3>
                         </div>
-                        <app-tasks-list
-                            [category]="Category.dontForgetAbout"
-                            [showTasks]="showTasks"
-                            [tasks]="tasks"
-                            (taskChange)="refreshPlanner($event)">
-                        </app-tasks-list>
+                        <app-todo [group]="Group.dontForgetAbout" [view]="view"></app-todo>
                     </div>
                     <div>
                         <div class="w-full flex justify-center">
                             <h3 class="ribbon">PROMETO HACER:</h3>
                         </div>
-                        <app-tasks-list
-                            [category]="Category.iPromiseToDo"
-                            [showTasks]="showTasks"
-                            [tasks]="tasks"
-                            (taskChange)="refreshPlanner($event)">
-                        </app-tasks-list>
+                        <app-todo [group]="Group.iPromiseToDo" [view]="view"></app-todo>
                     </div>
                 </div>
             </div>
@@ -39,67 +29,32 @@
         <main class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-3">
             <div>
                 <h3>LUNES [ {{datesOfWeek[0]}} ]</h3>
-                <app-tasks-list
-                [category]="Category.monday"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.weekPlannig" [day]="Day.monday" [view]="view"></app-todo>
             </div>
             <div>
                 <h3>MARTES [ {{datesOfWeek[1]}} ]</h3>
-                <app-tasks-list
-                [category]="Category.tuesday"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.weekPlannig" [day]="Day.tuesday" [view]="view"></app-todo>
             </div>
             <div>
                 <h3>MIÉRCOLES [ {{datesOfWeek[2]}} ]</h3>
-                <app-tasks-list
-                [category]="Category.wednesday"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.weekPlannig" [day]="Day.wednesday" [view]="view"></app-todo>
             </div>
             <div>
                 <h3>JUEVES [ {{datesOfWeek[3]}} ]</h3>
-                <app-tasks-list
-                [category]="Category.thursday"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.weekPlannig" [day]="Day.thursday" [view]="view"></app-todo>
             </div>
             <div>
                 <h3>VIERNES [ {{datesOfWeek[4]}} ]</h3>
-                <app-tasks-list
-                [category]="Category.friday"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.weekPlannig" [day]="Day.friday" [view]="view"></app-todo>
             </div>
             <div class="grid grid-cols-1 gap-3">
                 <div>
                     <h3>SÁBADO [ {{datesOfWeek[5]}} ]</h3>
-                    <app-tasks-list
-                    [category]="Category.saturday"
-                    [showTasks]="showTasks"
-                    [tasks]="tasks"
-                    (taskChange)="refreshPlanner($event)">
-                    </app-tasks-list>
+                    <app-todo [group]="Group.weekPlannig" [day]="Day.saturday" [view]="view"></app-todo>
                 </div>
                 <div>
                     <h3>DOMINGO [ {{datesOfWeek[6]}} ]</h3>
-                    <app-tasks-list
-                    [category]="Category.sunday"
-                    [showTasks]="showTasks"
-                    [tasks]="tasks"
-                    (taskChange)="refreshPlanner($event)">
-                    </app-tasks-list>
+                    <app-todo [group]="Group.weekPlannig" [day]="Day.sunday" [view]="view"></app-todo>
                 </div>
             </div>
         </main>
@@ -107,35 +62,25 @@
         <footer class="grid grid-cols-1 sm:grid-cols-2 gap-10">
             <div>
                 <h3 class="ribbon-2">LA FRASE DE LA SEMANA...</h3>
-                <app-tasks-list
-                [category]="Category.phraseOfTheWeek"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.phraseOfTheWeek" [view]="view"></app-todo>
             </div>
             <div>
                 <h3 class="ribbon-2">SIN FALTA LA PRÓXIMA...</h3>
-                <app-tasks-list
-                [category]="Category.withoutFailNextWeek"
-                [showTasks]="showTasks"
-                [tasks]="tasks"
-                (taskChange)="refreshPlanner($event)">
-                </app-tasks-list>
+                <app-todo [group]="Group.withoutFailNextWeek" [view]="view"></app-todo>
             </div>
         </footer>
     </div>
 
     <div class="flex flex-col sm:flex-row px-3 pb-3 text-sm">
         <div class="text-center italic mb-2">
-            <span *ngIf="tasksLeft == 0">No hay tareas pendientes...</span>
-            <span *ngIf="tasksLeft == 1">Falta {{tasksLeft}} tarea...</span>
-            <span *ngIf="tasksLeft > 1">Faltan {{tasksLeft}} tareas...</span>
+            <span *ngIf="remainingTasks == 0">No hay tareas pendientes...</span>
+            <span *ngIf="remainingTasks == 1">Falta {{remainingTasks}} tarea...</span>
+            <span *ngIf="remainingTasks > 1">Faltan {{remainingTasks}} tareas...</span>
         </div>
         <div class="flex flex-auto flex-wrap justify-center mb-2">
-            <button (click)="show(Show.all)" [ngClass]="showTasks == Show.all ? 'bg-white' : 'bg-gray-400'"  class="px-4 border border-solid border-black rounded mx-1">Todas</button>
-            <button (click)="show(Show.active)" [ngClass]="showTasks == Show.active ? 'bg-white' : 'bg-gray-400'" class="px-4 border border-solid border-black rounded mx-1">Activas</button>
-            <button (click)="show(Show.completed)" [ngClass]="showTasks == Show.completed ? 'bg-white' : 'bg-gray-400'"  class="px-4 border border-solid border-black rounded mx-1">Completas</button>
+            <button (click)="showTasks(View.all)" [ngClass]="view == View.all ? 'bg-white' : 'bg-gray-400'"  class="px-4 border border-solid border-black rounded mx-1">Todas</button>
+            <button (click)="showTasks(View.active)" [ngClass]="view == View.active ? 'bg-white' : 'bg-gray-400'" class="px-4 border border-solid border-black rounded mx-1">Activas</button>
+            <button (click)="showTasks(View.completed)" [ngClass]="view == View.completed ? 'bg-white' : 'bg-gray-400'"  class="px-4 border border-solid border-black rounded mx-1">Completas</button>
         </div>
         <div class="text-center mb-2">
             <button (click)="clearCompletedTasks()" class="px-4 bg-gray-400 border border-solid border-black rounded mx-1">Limpiar completas</button>

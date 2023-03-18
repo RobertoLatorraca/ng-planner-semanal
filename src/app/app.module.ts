@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlannerSemanalComponent } from './components/planner-semanal/planner-semanal.component';
-import { TasksListComponent } from './components/tasks-list/tasks-list.component';
+import { TodoComponent } from './components/todo/todo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlannerSemanalComponent,
-    TasksListComponent
+    TodoComponent
   ],
   imports: [
     BrowserModule,

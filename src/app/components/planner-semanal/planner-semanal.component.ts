@@ -1,49 +1,46 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Category } from 'src/app/models/category';
-import { Show } from 'src/app/models/show';
-import { Task } from 'src/app/models/task';
-import { LocalStorageService } from 'src/app/services/local-storage.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Day } from 'src/app/models/day';
+import { Group } from 'src/app/models/group';
+import { View } from 'src/app/models/view';
+import { TodoService } from 'src/app/services/todo.service';
 
 @Component({
   selector: 'app-planner-semanal',
   templateUrl: './planner-semanal.component.html',
   styleUrls: ['./planner-semanal.component.scss']
 })
-export class PlannerSemanalComponent implements OnInit {
+export class PlannerSemanalComponent implements OnInit, OnDestroy {
+
+  readonly Group = Group;
+  readonly Day = Day;
+  readonly View = View;
+
+  private remainingTasksSubject!: Subscription;
 
   datesOfWeek: number[] = [];
+  view: View = View.all;
+  remainingTasks!: number;
 
-  readonly Category = Category;
-  readonly Show = Show;
-
-  tasks: Task[] = [];
-
-  showTasks: Show = Show.all;
-  tasksLeft!: number
-
-  constructor(private localStorageService: LocalStorageService) { }
+  constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    this.tasks = this.localStorageService.loadPlanner();
-    this.countLeft();
+    this.remainingTasksSubject = this.todoService.onRemainingTasks().subscribe({
+      next: c => this.remainingTasks = c
+    });
     this.datesOfWeek = this.getDates();
   }
 
-  countLeft(): void {
-    this.tasksLeft = this.tasks.filter(t => t.completed == false).length;
+  ngOnDestroy(): void {
+    this.remainingTasksSubject.unsubscribe();
   }
   
-  show(show: Show): void {
-    this.showTasks = show;
+  showTasks(view: View): void {
+    this.view = view;
   }
 
   clearCompletedTasks(): void {
-    this.localStorageService.clearCompletedTasks();
-    this.ngOnInit();
-  }
-
-  refreshPlanner(taskChanged: Task) {
-    this.ngOnInit();
+    this.todoService.clearCompletedTasks();
   }
 
   getDates(): number[] {

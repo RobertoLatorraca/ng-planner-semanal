@@ -1,0 +1,35 @@
+.item {
+    font-family: "Caveat";
+    @apply
+        border-b
+        border-dotted
+        border-black
+        text-xl;
+}
+
+.text-through {
+    text-decoration-line: line-through;
+}
+
+.trash-icon {
+    content: url(../../../assets/svg/delete_black_18dp.svg);
+}
+
+.unchecked-icon {
+    content: url(../../../assets/svg/circle_black_18dp.svg);
+}
+
+.checked-icon {
+    content: url(../../../assets/svg/task_alt_black_18dp.svg);
+}
+
+.add-task {
+    font-family: "Ubuntu";
+    @apply 
+        w-full
+        outline-none
+        bg-transparent
+        text-sm
+        leading-6
+        text-gray-700;
+}

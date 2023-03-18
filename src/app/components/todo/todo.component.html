@@ -1,0 +1,19 @@
+<ul>
+    <li *ngFor="let task of filter()" class="flex item">
+        <div class="flex items-center pr-2">
+            <a (click)="toggleCompletedTask(task)" class="cursor-pointer">
+                <span *ngIf="!task.completed"><i class="unchecked-icon"></i></span>
+                <span *ngIf="task.completed"><i class="checked-icon"></i></span>
+            </a>
+        </div>
+        <a (click)="toggleCompletedTask(task)" class="grow cursor-pointer">
+            <div [class.text-through]="task.completed" class="grow">{{task.task}}</div>
+        </a>
+        <div class="flex items-center">
+            <a (click)="deleteTask(task)" class="cursor-pointer"><span><i class="trash-icon"></i></span></a>
+        </div>
+    </li>
+    <li>
+        <input type="text" name="add" class="add-task" placeholder="Agregar nueva tarea aquí..." (keyup.enter)="addTask($event)">
+    </li>
+</ul>
