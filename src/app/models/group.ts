@@ -3,5 +3,11 @@ export enum Group {
     iPromiseToDo,
     phraseOfTheWeek,
     withoutFailNextWeek,
-    weekPlannig
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday
 }

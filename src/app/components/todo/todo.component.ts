@@ -3,8 +3,7 @@ import { Task } from 'src/app/models/task';
 import { Group } from 'src/app/models/group';
 import { TodoService } from 'src/app/services/todo.service';
 import { Subscription } from 'rxjs';
-import { Day } from 'src/app/models/day';
-import { View } from 'src/app/models/view';
+import { DragAndDropService } from 'src/app/services/drag-and-drop.service';
 
 @Component({
   selector: 'app-todo',
@@ -16,20 +15,15 @@ export class TodoComponent implements OnInit, OnDestroy {
   @Input()
   group!: Group;
 
-  @Input()
-  day!: Day;
-
-  @Input()
-  view!: View;
-
   tasksList: Task[] = [];
   private todoSubscription!: Subscription;
+  private statusSubscription!: Subscription;
   
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private dragAndDropService: DragAndDropService) { }
 
   ngOnInit(): void {
     this.todoSubscription = this.todoService.onTask().subscribe({
-      next: todoList => this.tasksList = todoList
+      next: tasksMap => this.tasksList = tasksMap.get(Group[this.group])!
     });
   }
 
@@ -39,43 +33,65 @@ export class TodoComponent implements OnInit, OnDestroy {
 
   filter(): Task[] {
     let result: Task[] = this.filterByGroup(this.tasksList);
-    if (this.group == Group.weekPlannig) result = this.filterByDay(result);
     result = this.filterByView(result);
     return result;
   }
 
   addTask(event: any): void {
     let task = new Task();
-    task.task = event.srcElement.value;
-    task.group = this.group;
-    task.day = this.day;
-    task.position = this.tasksList.length // mejorar algoritmo de posicion
+    task.title = event.srcElement.value;
     event.srcElement.value = '';
-    this.todoService.addTask(task);
+
+    this.todoService.addTask(task, this.group);
   }
 
-  deleteTask(task: Task): void {
-    this.todoService.removeTask(task);
+  removeTask(task: Task): void {
+    this.todoService.removeTask(task, this.group);
   }
 
   toggleCompletedTask(task: Task): void {
     task.completed = !task.completed;
-    this.todoService.updateTask(task);
+    this.todoService.notifyChanges();
+  }
+
+  itemDragged(event: any, task: Task): void {
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      this.dragAndDropService.setData({sourceData: task, sourceCtrl: this});
+    }
+    event.stopPropagation();
+  }
+
+  itemDragOver(event: any, task?: Task): void {
+    event.preventDefault();
+    let dragAndDropData = this.dragAndDropService.getData();
+    this.dragAndDropService.setData({
+      action: 'move',
+      sourceData: dragAndDropData.sourceData,
+      sourceCtrl: dragAndDropData.sourceCtrl,
+      targetData: task,
+      targetCtrl: this,
+      //dropPos: task?.position
+    });
+    event.stopPropagation();
+  }
+
+  ctrlDrop(event: any): void {
+    let dragAndDropData = this.dragAndDropService.getData();
+    let task: Task = dragAndDropData.sourceData;
+    //task.group = dragAndDropData.targetCtrl.group;
+    //task.day = dragAndDropData.targetCtrl.day;
+    this.todoService.notifyChanges();
   }
 
   private filterByGroup(tasks: Task[]): Task[] {
-    return tasks.filter(
+    /*return tasks.filter(
       t => t.group == this.group
-    );
+    );*/
+    return [];
   }
 
-  private filterByDay(tasks: Task[]): Task[] {
-    return tasks.filter(
-      t => t.day == this.day
-    );
-  }
-
-  private filterByView(tasks: Task[]): Task[] {
+  private filterByView(tasks: Task[]): Task[] {/*
     switch (this.view) {
       case View.active:
         return tasks.filter(t => t.completed == false);
@@ -83,7 +99,8 @@ export class TodoComponent implements OnInit, OnDestroy {
         return tasks.filter(t => t.completed == true);
       default:
         return tasks;
-    }
+    }*/
+    return [];
   }
 
 }

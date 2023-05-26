@@ -1,11 +1,5 @@
-import { Day } from "./day";
-import { Group } from "./group";
-
 export class Task {
     id!: string;
-    task!: string;
-    position!: number;
-    group!: Group;
-    day!: Day;
+    title!: string;
     completed: boolean = false;
 }

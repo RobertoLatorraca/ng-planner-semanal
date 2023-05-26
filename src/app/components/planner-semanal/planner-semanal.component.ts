@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Day } from 'src/app/models/day';
 import { Group } from 'src/app/models/group';
-import { View } from 'src/app/models/view';
+import { Status } from 'src/app/models/status';
 import { TodoService } from 'src/app/services/todo.service';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-planner-semanal',
@@ -12,52 +12,34 @@ import { TodoService } from 'src/app/services/todo.service';
 })
 export class PlannerSemanalComponent implements OnInit, OnDestroy {
 
-  readonly Group = Group;
-  readonly Day = Day;
-  readonly View = View;
+  readonly GROUP = Group;
+  readonly STATUS = Status;
 
   private remainingTasksSubject!: Subscription;
 
   datesOfWeek: number[] = [];
-  view: View = View.all;
+  status: Status = Status.all;
   remainingTasks!: number;
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private utilsService: UtilsService) { }
 
   ngOnInit(): void {
     this.remainingTasksSubject = this.todoService.onRemainingTasks().subscribe({
       next: c => this.remainingTasks = c
     });
-    this.datesOfWeek = this.getDates();
+    this.datesOfWeek = this.utilsService.getDatesOfWeek();
   }
 
   ngOnDestroy(): void {
     this.remainingTasksSubject.unsubscribe();
   }
   
-  showTasks(view: View): void {
-    this.view = view;
+  showTasks(status: Status): void {
+    this.status = status;
   }
 
   clearCompletedTasks(): void {
     this.todoService.clearCompletedTasks();
-  }
-
-  getDates(): number[] {
-    let now: Date = new Date();
-    let dayNumber: number = now.getDay();
-    let dayInMillis: number = 24 * 60 * 60 * 1000;
-    let firstDayOfWeek: Date = new Date();
-    firstDayOfWeek.setTime(dayNumber == 0 ?
-      now.getTime() - 6 * dayInMillis :
-      now.getTime() - (dayNumber - 1) * dayInMillis);
-    let result: number[] = [];
-    for (let i = 0; i < 7; i++) {
-      let temp = new Date();
-      temp.setTime(firstDayOfWeek.getTime() + i * dayInMillis);
-      result.push(temp.getDate());
-    }
-    return result;
   }
 
 }
