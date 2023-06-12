@@ -53,6 +53,9 @@ export class TodoService {
   }
 
   private countRemainingTasks(): void {
+    
+
+
     //TodoService.remainingTasksSubject.next(
       //TodoService.todo.filter(t => t.completed == false).length);
   }
