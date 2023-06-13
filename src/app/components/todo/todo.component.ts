@@ -78,10 +78,8 @@ export class TodoComponent implements OnInit, OnDestroy {
 
   ctrlDrop(event: any): void {
     let dragAndDropData = this.dragAndDropService.getData();
-    let task: Task = dragAndDropData.sourceData;
-    //task.group = dragAndDropData.targetCtrl.group;
-    //task.day = dragAndDropData.targetCtrl.day;
-    this.todoService.notifyChanges();
+    this.todoService.removeTask(dragAndDropData.sourceData, dragAndDropData.sourceCtrl.group);
+    this.todoService.addTask(dragAndDropData.sourceData, dragAndDropData.targetCtrl.group);
   }
 
   private filterByGroup(tasks: Task[]): Task[] {

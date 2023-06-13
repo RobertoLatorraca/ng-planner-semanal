@@ -53,11 +53,11 @@ export class TodoService {
   }
 
   private countRemainingTasks(): void {
-    
-
-
-    //TodoService.remainingTasksSubject.next(
-      //TodoService.todo.filter(t => t.completed == false).length);
+    let remainingTasks: Task[] = [];
+    TodoService.todo.getTasksMap().forEach(t => {
+      remainingTasks = remainingTasks.concat(t.filter(t => t.completed === false))
+    });
+    TodoService.remainingTasksSubject.next(remainingTasks.length);
   }
 
   private sendTasks(): void {
